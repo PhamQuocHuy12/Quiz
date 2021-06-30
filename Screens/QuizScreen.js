@@ -1,6 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
 
 const question = [{question: 'This is a very long question ................................................................................',
                     answers:[{id:'A',text:'something',correct: true},
@@ -20,7 +21,8 @@ const question = [{question: 'This is a very long question .....................
 
 var savedAnswer = new Array(question.length).fill({id: null, correct: null});
 
-export default function QuizScreen() {
+export default function QuizScreen( {navigation} ) {
+
   const [selectedId, setSelectedId] = useState(null);
   const [currentQuiz, setCurrentQuiz] = useState(0);
   console.log(savedAnswer);
@@ -52,6 +54,8 @@ export default function QuizScreen() {
       savedAnswer[currentQuiz] = {id: option.id, correct: option.correct};
   }
 
+ 
+
   return (
     <View style={styles.container}>
       <Text style = {styles.question}>Question {currentQuiz+1}: {question[currentQuiz].question}</Text>
@@ -80,6 +84,11 @@ export default function QuizScreen() {
           <TouchableOpacity style={styles.navButton} onPress={nextQuestion}>
             <Text style={{textAlign:'center'}}> Next Quiz </Text>
           </TouchableOpacity>
+        }
+        {currentQuiz == question.length-1 &&
+          <TouchableOpacity style={styles.navButton}  onPress={() => navigation.navigate("Result")} >
+            <Text style={{textAlign:'center'}}> All done </Text>
+          </TouchableOpacity>   
         }
         
       </View>
