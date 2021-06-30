@@ -13,7 +13,7 @@ const question = [{question: 'This is a very long question .....................
                               {option:'C',correct: false},
                               {option:'D',correct: false}]}];
 
-var savedAnswer = new Array(question.length).fill(null);
+var savedAnswer = new Array(question.length).fill({option: null, correct: null});
 
 export default function App() {
   const [selectedId, setSelectedId] = useState(null);
@@ -23,10 +23,10 @@ export default function App() {
   const nextQuestion = () => {
     if(currentQuiz < question.length -1){
       setCurrentQuiz(currentQuiz + 1);
-      if (savedAnswer[currentQuiz+1] == null){
+      if (savedAnswer[currentQuiz+1].option == null){
         setSelectedId(null);
       } else {
-        setSelectedId(savedAnswer[currentQuiz+1]);
+        setSelectedId(savedAnswer[currentQuiz+1].option);
       }
     }
   };
@@ -34,16 +34,16 @@ export default function App() {
   const previousQuestion = () => {
     if(currentQuiz > 0){
       setCurrentQuiz(currentQuiz - 1);
-      if (savedAnswer[currentQuiz-1] == null){
+      if (savedAnswer[currentQuiz-1].option == null){
         setSelectedId(null);
       } else {
-        setSelectedId(savedAnswer[currentQuiz-1]);
+        setSelectedId(savedAnswer[currentQuiz-1].option);
       }
     }
   };
   
   const onOptionPress = (option) => {
-      setSelectedId(option);
+      setSelectedId(option.option);
       savedAnswer[currentQuiz] = option;
   }
 
@@ -56,8 +56,8 @@ export default function App() {
           renderItem = {({item}) => (
             <Option 
                 item={item}
-                onPress={() => onOptionPress(item.option)}
-                backgroundColor={item.option == selectedId? (item.correct? 'lightgreen': 'pink'):'grey'}
+                onPress={() => onOptionPress(item)}
+                backgroundColor={item.option == selectedId? '#6495ED':'#fff'}
                 >
             </Option>
           )}
@@ -90,13 +90,15 @@ const Option = ({item, onPress, backgroundColor }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#87CEFA',
     alignItems: 'center',
     justifyContent: 'center',
   },
   question: {
     alignSelf: 'baseline',
-    backgroundColor: 'lightblue',
+    backgroundColor: '#fff',
+    borderWidth: 5,
+    borderColor:'#6495ED',
     width: '90%',
     borderRadius: 20,
     padding: '5%',
